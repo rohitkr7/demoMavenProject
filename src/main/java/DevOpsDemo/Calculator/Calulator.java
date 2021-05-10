@@ -13,12 +13,12 @@ public class Calulator {
 		return x * y; 
 	}
 	
-	public double divide(double x, double y) {
+	public double divide(double x, double y) throws Exception {
 		if(y!=0) {
 			return x / y; 
 		}
 		else {
-			return -1;
+			throw new Exception("Divide By Zero");
 		}
 	}
 }
