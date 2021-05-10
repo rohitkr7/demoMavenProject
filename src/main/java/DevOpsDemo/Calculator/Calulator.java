@@ -14,6 +14,7 @@ public class Calulator {
 	}
 	
 	public double divide(double x, double y) throws Exception {
+		//This is a modified division method
 		if(y!=0) {
 			return x / y; 
 		}
