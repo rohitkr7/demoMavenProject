@@ -19,4 +19,11 @@ public class CalculatorTest {
 		
 		assertTrue("Sum function not working fine.", calculator.subtract(100, 20) == 80);
 	}
+	
+	@Test
+	public void MultiplyTest() {
+		//This test will check the multiply functionality of the test
+		
+		assertTrue("Sum function not working fine.", calculator.multiply(10, 20) == 200);
+	}
 }
