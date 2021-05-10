@@ -10,6 +10,6 @@ public class CalculatorTest {
 	public void sumTest() {
 		//This test will check the sum functionality of the test
 		
-		assertTrue(calculator.sum(10, 20) == 30);
+		assertTrue("sum function not working fine", calculator.sum(10, 20) == 30);
 	}
 }
