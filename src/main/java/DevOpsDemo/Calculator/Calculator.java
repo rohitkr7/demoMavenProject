@@ -1,6 +1,6 @@
 package DevOpsDemo.Calculator;
 
-public class Calulator {
+public class Calculator {
 	public double sum(double x, double y) {
 		return x + y; 
 	}
