@@ -25,7 +25,5 @@ public class CalculatorTest {
 		//This test will check the multiply functionality of the test
 		
 		assertTrue("Sum function not working fine.", calculator.multiply(10, 20) == 200);
-		//below line is meant to deliberately fail the testcase 
-		assertTrue(10 == 5);
 	}
 }
