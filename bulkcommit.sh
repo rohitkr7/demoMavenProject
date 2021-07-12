@@ -18,11 +18,13 @@ fi
 # Function to create multiple commits
 createNewCommits() {
     x=1
+    branchName=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+    echo "Current Branch : $branchName"
     while [ $x -le $totalCommitCount ]; do
         echo "-------  Creating File -------> $x"
         current_time=$(date "+%Y_%m_%d_%H_%M_%s")
         echo "Current Time : $current_time"
-        command="echo 'randfile_$x_$current_time' >> BulkCommitDir/randfile_'$x'_$current_time.txt && git add . && git commit -m '$x:randfile_$current_time.txt'"
+        command="echo '$x:"$branchName"_randfile__$current_time' >> BulkCommitDir/"$branchName"_randfile__'$x'_$current_time.txt && git add . && git commit -m '$x:"$branchName"_randfile_$current_time.txt'"
         echo $command
         eval "$command"
 
@@ -31,7 +33,7 @@ createNewCommits() {
         eval "$latestCommitSHAValueCommand"
 
         x=$(($x + 1))
-        sleep .001
+        sleep .01
         # echo "\tWaiting for 1 sec."
     done
 }
