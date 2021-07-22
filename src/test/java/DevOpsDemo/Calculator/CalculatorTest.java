@@ -18,7 +18,7 @@ public class CalculatorTest {
 	public void subtractTest() {
 		// This test will check the subtract functionality of the test
 
-		assertTrue("Sum function not working fine.", calculator.subtract(100, 20) == 80);
+		assertTrue("Sum function not working fine.", calculator.subtract(100, 20) == 70);
 	}
 
 	@Test
