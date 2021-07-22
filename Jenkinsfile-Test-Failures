@@ -1,0 +1,72 @@
+pipeline {
+   agent any
+   tools {
+      maven 'Maven'
+   }
+   stages {
+      stage('Build') {
+         steps {
+            echo 'Building'
+            sh 'mvn -X clean install -DskipTests'
+         }
+      }
+      stage('Test') {
+         steps {
+               echo 'Testing'
+               catchError {
+                  sh 'mvn test'
+               }
+            echo currentBuild.result
+         }
+         post {
+            always {
+               junit '**/target/surefire-reports/*.xml'
+            }
+         }
+      }
+
+      stage('Create Artifact for prod') {
+         when {
+            expression {
+               currentBuild.result == null || currentBuild.result == 'SUCCESS'
+            }
+         }
+         steps {
+            echo 'Creating artifact'
+            sh 'mvn package'
+            sleep 3
+            snDevOpsArtifact(artifactsPayload:"""
+               {"artifacts":
+                  [
+                     {
+                        "name": "mavenDemoProject-mvp.jar",
+                        "version":"0.${env.BUILD_NUMBER}.0",
+                        "semanticVersion": "0.${env.BUILD_NUMBER}.0",
+                        "repositoryName": "bicycle-artifacts-repo"
+                     }
+                    ]
+                 }""")
+            snDevOpsPackage(name: 'avgbicycleewingapp', artifactsPayload: """
+              {"artifacts":
+               [
+                  {
+                     "name": "mavenDemoProject-mvp.zip",
+                     "repositoryName": "bicycle-artifacts-repo",
+                     "pipelineName": "maven-buiild-pipeline",
+                     "taskExecutionNumber":"${env.BUILD_NUMBER}",
+                     "stageName":"Create Artifact for prod",
+                     "branchName": "master"
+                  }
+                 ]
+                }""")
+         }
+      }
+
+      stage('Deploy') {
+         steps {
+                  snDevOpsChange()
+                  echo '>> Deploy in prod'
+         }
+      }
+   }
+}
