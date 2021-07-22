@@ -26,6 +26,11 @@ pipeline {
       }
 
       stage('Create Artifact for prod') {
+         when {
+            expression {
+               currentBuild.result == null || currentBuild.result == 'SUCCESS'
+            }
+         }
          steps {
             echo 'Creating artifact'
             sh 'mvn package'
