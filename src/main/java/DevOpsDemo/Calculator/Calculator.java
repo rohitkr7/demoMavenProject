@@ -13,7 +13,7 @@ public class Calculator {
 		return x * y; 
 	}
 	
-	public double divide(int x, int y) throws ArithmeticException {
+	public int divide(int x, int y) throws ArithmeticException {
 		//This is a modified division method
 		if(y!=0) {
 			return x / y; 

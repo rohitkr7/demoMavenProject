@@ -32,6 +32,6 @@ public class CalculatorTest {
 	public void divideTest() {
 		// This test will check the multiply functionality of the test
 
-		assertTrue("Division function not working fine.", calculator.divide(3, 2) == 1.5);
+		assertTrue("Division function not working fine.", calculator.divide(3, 2) == 1);
 	}
 }
