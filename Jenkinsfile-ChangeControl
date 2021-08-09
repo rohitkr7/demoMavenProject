@@ -50,7 +50,7 @@ pipeline {
               {"artifacts":
                [
                   {
-                     "name": "mavenDemoProject-mvp.zip",
+                     "name": "mavenDemoProject-mvp.jar",
                      "repositoryName": "bicycle-artifacts-repo",
                      "pipelineName": "maven-buiild-pipeline",
                      "taskExecutionNumber":"${env.BUILD_NUMBER}",
