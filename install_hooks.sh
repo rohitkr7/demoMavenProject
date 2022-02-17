@@ -15,7 +15,7 @@ then
     cd .hooks
     for hook in $(ls)
     do
-        cp $hook ../../.git/hooks
+        cp $hook ../.git/hooks
     done
     cd ..
 fi
