@@ -7,11 +7,7 @@ COMMIT_SOURCE=$2
 SHA1=$3
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [ $CURRENT_BRANCH == "HEAD" ]
-then
-    echo 'current branch == HEAD'
-    exit 0;
-fi
+echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
 PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)"
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
