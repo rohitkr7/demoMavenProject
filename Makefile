@@ -16,7 +16,7 @@ clean_textfiles:
 
 build_project:
 		echo "Building the maven project"
-		mvn clean verify -Dmaven.test.skip=true
+		mvn test-compile
 
 install_hooks:
 		echo "Running install_hooks.sh"

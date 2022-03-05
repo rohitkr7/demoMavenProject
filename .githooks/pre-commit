@@ -3,11 +3,15 @@
 #changes directory to glide-template and runs mvn clean verify
 
 CWD=`pwd`
-# Move to the project directory which you want to build
-# cd glide-template
-mvn clean verify -Dmaven.test.skip=true
+
+# Get the path of the files which are getting modified
+
+# Move to the project directory which you want to compile
+
+mvn test-compile
 if [ $? -ne 0 ]; then
   cd $CWD
+  echo 'Commit ABORTED because of existing issues, Please check logs!'
   exit 1
 fi
 cd $CWD
