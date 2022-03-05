@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Prepends commit message with STRY, DEF, BAK tickets or MAINT
+#Append commit message with STRY, DEF, BAK tickets or MAINT
 
 COMMIT_MSG_FILE=$1
 COMMIT_SOURCE=$2
@@ -41,7 +41,7 @@ then
         exit 0;
     fi
 
-    echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
+    echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
 
     if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
     then
