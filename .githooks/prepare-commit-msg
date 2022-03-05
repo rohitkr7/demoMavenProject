@@ -7,10 +7,7 @@ COMMIT_SOURCE=$2
 SHA1=$3
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-if [ $CURRENT_BRANCH == "HEAD" ]
-then
-    exit 0;
-fi
+# echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
 PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)"
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
@@ -23,6 +20,6 @@ then
         exit 0;
     fi
 
-    echo "${TICKET}: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
     echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
+    echo "TEST: ${TICKET} - ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
 fi
