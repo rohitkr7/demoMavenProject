@@ -9,9 +9,21 @@ SHA1=$3
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
-if [[ $CURRENT_BRANCH == *"_"* ]] || [[ $CURRENT_BRANCH == *"-"* ]]; then
-  echo "It's there!"
+separator=""
+if [[ $CURRENT_BRANCH == *"_"* ]]
+then
+  #echo "branch name cotains underscore"
+  separator="_"
+elif [[ $CURRENT_BRANCH == *"-"* ]]
+then
+    #echo "branch name cotains hyphen"
+    separator="-"
 fi
+
+arr=(${CURRENT_BRANCH//${separator}/ })
+CURRENT_BRANCH=arr[0]
+
+echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
 PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)(_*).*"
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
