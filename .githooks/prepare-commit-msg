@@ -42,7 +42,7 @@ then
     fi
 
     echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
-    if [[${COMMIT_MESSAGE} == "TEST"*}]]
+    if [[ $COMMIT_MESSAGE == "TEST"* ]]
     then
         echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
     else
