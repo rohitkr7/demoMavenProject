@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ------------------- Compile Maven Project -------------------- #
 
 #changes directory to glide-template and runs mvn clean verify
