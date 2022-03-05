@@ -21,7 +21,7 @@ then
 fi
 
 arr=(${CURRENT_BRANCH//${separator}/ })
-CURRENT_BRANCH=arr[0]
+CURRENT_BRANCH=${arr[0]}
 
 echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
