@@ -30,11 +30,11 @@ echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
 # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
 
 PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
+COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
     TICKET="${BASH_REMATCH[0]}"
     # echo "TICKET IS = "${TICKET}
-    COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
     
     if [[ $COMMIT_MESSAGE =~ $TICKET ]]
     then
@@ -42,5 +42,14 @@ then
     fi
 
     echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
-    echo "TEST: ${TICKET} - ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+    if [[$COMMIT_MESSAGE != "test"*]] && $COMMIT_MESSAGE == "TEST"*]] && $COMMIT_MESSAGE != "maint"*]] && $COMMIT_MESSAGE == "MAINT"*]]
+    then
+        echo "TEST: ${TICKET} - ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+        echo "TEST was pre-fixed to the commit message"
+    else
+        echo ${TICKET} >> $COMMIT_MSG_FILE
+    fi
+elif [[ $COMMIT_MESSAGE != "MAINT*" ]] && [[ $COMMIT_MESSAGE != "TEST*" ]]
+then
+    echo "[WARNING] Your Commit message doesn't start with TEST or MAINT."
 fi
