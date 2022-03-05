@@ -9,76 +9,75 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 * ProjectDirectory/.githooks
     * pre-commit
     ```sh
-        CWD=`pwd`
-        # Move to the project directory which you want to build
-        # cd glide-template
-        # Build the maven  project
-        mvn clean verify -Dmaven.test.skip=true
-        if [ $? -ne 0 ]; then
-        cd $CWD
-        exit 1
-        fi
-        cd $CWD
+    CWD=`pwd`
+    # Move to the project directory which you want to build
+    # cd glide-template
+    # Build the maven  project
+    mvn clean verify -Dmaven.test.skip=true
+    if [ $? -ne 0 ]; then
+    cd $CWD
+    exit 1
+    fi
+    cd $CWD
     ```
     * prepare-commit-msg
     ```sh
-        #Prepends commit message with STRY, DEF, BAK tickets or MAINT
+    #Prepends commit message with STRY, DEF, BAK tickets or MAINT
 
-        COMMIT_MSG_FILE=$1
-        COMMIT_SOURCE=$2
-        SHA1=$3
+    COMMIT_MSG_FILE=$1
+    COMMIT_SOURCE=$2
+    SHA1=$3
 
-        CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-        if [ $CURRENT_BRANCH == "HEAD" ]
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    if [ $CURRENT_BRANCH == "HEAD" ]
+    then
+        exit 0;
+    fi
+
+    PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)"
+    if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
+    then
+        TICKET="${BASH_REMATCH[0]}"
+        COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
+        
+        if [[ $COMMIT_MESSAGE =~ $TICKET ]]
         then
             exit 0;
         fi
 
-        PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)"
-        if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
-        then
-            TICKET="${BASH_REMATCH[0]}"
-            COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
-            
-            if [[ $COMMIT_MESSAGE =~ $TICKET ]]
-            then
-                exit 0;
-            fi
-
-            echo "${TICKET}: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
-            echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
-        fi
+        echo "${TICKET}: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+        echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
+    fi
     ```
 ### Master git-hooks installer:
 * ProjectDirectory/install_hooks.sh
     ```sh
-        #Installs the hooks into your githooks directory
+    #Installs the hooks into your githooks directory
 
-        printf "This script will copy the following hooks to your .git/hooks directory:\n\n"
-        for hook in $(ls .githooks)
+    printf "This script will copy the following hooks to your .git/hooks directory:\n\n"
+    for hook in $(ls .githooks)
+    do
+    echo $hook
+    done
+    printf "\n\n"
+    read -r -p "Please enter Y to continue: " RESPONSE
+
+    if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])$ ]]
+    then
+        cd .githooks
+        for hook in $(ls)
         do
-        echo $hook
+            cp $hook ../.git/hooks
         done
-        printf "\n\n"
-        read -r -p "Please enter Y to continue: " RESPONSE
+        cd ..
+    fi
 
-        if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])$ ]]
-        then
-            cd .githooks
-            for hook in $(ls)
-            do
-                cp $hook ../.git/hooks
-            done
-            cd ..
-        fi
-
-        echo "Hooks installed successfully"
-
+    echo "Hooks installed successfully"
     ```
 
 ### Makefile for setups:
 * makefile
- ```makefile
+    ```Makefile
     all: say_hello change_hooks_config
     # all: say_hello generate_textfiles clean_textfiles
     # Note - First Line of the make file is always the default goal/target 
@@ -106,7 +105,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     change_hooks_config:
             echo "Modifying git hook config"
             git config core.hooksPath .githooks
- ``` 
+    ``` 
 
 <!-- <p align="center">
   <img src="./img/why.png" alt="Statoscope example" width="650">
