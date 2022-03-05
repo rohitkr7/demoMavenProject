@@ -25,5 +25,5 @@ then
     fi
 
     echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
-    echo "New Commit Message >>>> TEST: ${TICKET}: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+    echo "TEST: ${TICKET} - ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
 fi
