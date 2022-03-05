@@ -9,7 +9,7 @@ SHA1=$3
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
-if [[ $CURRENT_BRANCH == *"_"* ]]; then
+if [[ $CURRENT_BRANCH == *"_"* ]] || [[ $CURRENT_BRANCH == *"-"* ]]; then
   echo "It's there!"
 fi
 
