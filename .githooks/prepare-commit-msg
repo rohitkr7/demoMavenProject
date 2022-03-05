@@ -9,7 +9,7 @@ SHA1=$3
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
 
-PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*{_}.*)"
+PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*_*)"
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
     TICKET="${BASH_REMATCH[0]}"
