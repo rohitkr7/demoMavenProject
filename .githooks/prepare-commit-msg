@@ -33,6 +33,7 @@ PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
     TICKET="${BASH_REMATCH[0]}"
+    echo "TICKET IS = "${TICKET}
     COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
     
     if [[ $COMMIT_MESSAGE =~ $TICKET ]]
