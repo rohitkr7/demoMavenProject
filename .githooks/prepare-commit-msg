@@ -47,7 +47,7 @@ then
         echo "TEST: ${TICKET} - ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
         echo "TEST was pre-fixed to the commit message"
     else
-        echo ${TICKET} >> $COMMIT_MSG_FILE
+        echo " - "${TICKET} >> $COMMIT_MSG_FILE
     fi
 elif [[ $COMMIT_MESSAGE != "MAINT*" ]] && [[ $COMMIT_MESSAGE != "TEST*" ]]
 then
