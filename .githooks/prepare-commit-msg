@@ -25,7 +25,7 @@ fi
 arr=(${CURRENT_BRANCH//${separator}/ })
 CURRENT_BRANCH=${arr[0]}
 
-#echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
+echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
 
 # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
 
