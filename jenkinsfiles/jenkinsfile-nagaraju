@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+    tools {
+        maven 'maven'
+    }
+    stages {
+        stage("Build") {
+            steps {
+                echo "Building..."
+                snDevOpsStep()
+                sh 'mvn clean install'
+            }
+        }
+        stage("Test") {
+            steps {
+                sleep 5
+                echo "Testing..."
+                snDevOpsStep()
+                sh "mvn test -Dpublish"
+               junit "**/target/surefire-reports/*.xml"
+            }
+        }
+        stage("Deploy") {
+            steps {
+                sleep 5
+                echo "Deploying.."
+                snDevOpsStep()
+                snDevOpsArtifact(artifactsPayload:"""{"artifacts": [
+                    {"name": "demo1.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo1"},
+                    {"name": "demo2.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo2"},
+                    {"name": "demo3.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo3"},
+                    {"name": "demo4.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo4"},
+                    {"name": "demo5.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo5"}]}""")
+                sleep 5
+                snDevOpsChange()
+            }
+        }
+        stage("Prod") {
+            steps {
+                sleep 5
+                echo "Prod deploy..."
+                snDevOpsStep()
+                snDevOpsPackage(name: "devops_pipeline_demo", artifactsPayload: """{"artifacts": [
+                    {"name": "demo1.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo1"},
+                    {"name": "demo2.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo2"},
+                    {"name": "demo3.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo3"},
+                    {"name": "demo4.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo4"},
+                    {"name": "demo5.jar","version": "1.0","semanticVersion": "1.1.0","repositoryName": "demo5"}]}""")
+                sleep 5
+                snDevOpsChange()
+            }
+        }
+    }
+}
