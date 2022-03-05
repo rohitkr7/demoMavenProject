@@ -51,8 +51,10 @@ then
         echo "TEST: was pre-fixed to the commit message"
     fi
 
-elif [[ $COMMIT_MESSAGE != "MAINT*" ]] && [[ $COMMIT_MESSAGE != "TEST*" ]] && [[ $COMMIT_MESSAGE != "test*" ]] && [[ $COMMIT_MESSAGE != "maint*" ]]
+elif [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
 then
+    exit 0;
+else
     echo "TEST: "${COMMIT_MESSAGE} > $COMMIT_MSG_FILE
     echo "TEST: was pre-fixed to the commit message"
 fi
