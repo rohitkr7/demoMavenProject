@@ -31,7 +31,7 @@ then
     TICKET="${BASH_REMATCH[0]}"
     COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
     
-    if [[ $COMMIT_MESSAGE =~ 'TEST: '$TICKET ]]
+    if [[ $COMMIT_MESSAGE =~ $TICKET ]]
     then
         exit 0;
     fi
