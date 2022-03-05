@@ -42,12 +42,12 @@ then
     fi
 
     echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
-    if [[$COMMIT_MESSAGE != "TEST*"]]
+    if [[${COMMIT_MESSAGE//"TEST*"/}]]
     then
+        echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+    else
         echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
         echo "TEST: was pre-fixed to the commit message"
-    else
-        echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
     fi
 elif [[ $COMMIT_MESSAGE != "MAINT*" ]] && [[ $COMMIT_MESSAGE != "TEST*" ]]
 then
