@@ -3,8 +3,9 @@
 #changes directory to glide-template and runs mvn clean verify
 
 CWD=`pwd`
-cd glide-template
-mvn clean verify
+# Move to the project directory which you want to build
+# cd glide-template
+mvn clean verify -Dmaven.test.skip=true
 if [ $? -ne 0 ]; then
   cd $CWD
   exit 1

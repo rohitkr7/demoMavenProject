@@ -3,7 +3,7 @@
 #Installs the hooks into your githooks directory
 
 printf "This script will copy the following hooks to your .git/hooks directory:\n\n"
-for hook in $(ls .hooks)
+for hook in $(ls .githooks)
 do
   echo $hook
 done
