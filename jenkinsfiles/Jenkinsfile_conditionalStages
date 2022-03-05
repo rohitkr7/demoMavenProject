@@ -6,28 +6,27 @@ pipeline {
     stages {
         stage("checkout") {
             steps {
-                
-                echo "Building Pipeline" 
+                echo "Building Pipeline"
                 checkout scm
             }
         }
 
         stage("build") {
             steps {
-                
+
                 sh 'mvn clean install -DskipTests'
                 echo 'Building..Pipeline'
                 echo "Pipeline name is ${env.JOB_NAME}"
- 				echo "Pipleine run rumber is ${env.BUILD_NUMBER}"
- 				echo "Stage name is ${env.STAGE_NAME}"
- 				echo "GIT branch is ${env.GIT_BRANCH}"
+				echo "Pipleine run rumber is ${env.BUILD_NUMBER}"
+				echo "Stage name is ${env.STAGE_NAME}"
+				echo "GIT branch is ${env.GIT_BRANCH}"
                 echo "globalprops -- ${env.snartifacttoolId} -- ${env.snhost} -- ${env.snuser} -- ${env.snpassword} ";
         }
        }
-        
+
 	stage('unit-tests') {
             steps {
-               snDevOpsArtifact(artifactsPayload:"""{"artifacts": [{"name": "devops_pipeline_demo.jar","version": "${version}","semanticVersion": "${semanticVersion}","repositoryName": "devops_pipeline_demo"}],"stageName": "unit-tests"}""")            
+               snDevOpsArtifact(artifactsPayload:"""{"artifacts": [{"name": "devops_pipeline_demo.jar","version": "${version}","semanticVersion": "${semanticVersion}","repositoryName": "devops_pipeline_demo"}],"stageName": "unit-tests"}""")
 
                 echo "Unit Test"
                 sh "mvn test"
@@ -37,11 +36,11 @@ pipeline {
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml' 
+                    junit '**/target/surefire-reports/*.xml'
                 }
           }
         }
-	
+
         stage("deploy") {
             stages{
                 stage('deploy to dev') {
@@ -49,7 +48,7 @@ pipeline {
                         branch 'dev'
                     }
                     steps{
-                        
+
                         echo "deploy in UAT"
                         snDevOpsChange()
 
@@ -60,15 +59,14 @@ pipeline {
                         branch 'master'
                     }
                     steps{
-			snDevOpsPackage(name: "balu-package", artifactsPayload:"""{"artifacts": [{"name": "devops_pipeline_demo.jar","version": "${version}","semanticVersion": "${semanticVersion}","repositoryName": "devops_pipeline_demo"}],"stageName": "deploy"}""")            
+			snDevOpsPackage(name: "balu-package", artifactsPayload:"""{"artifacts": [{"name": "devops_pipeline_demo.jar","version": "${version}","semanticVersion": "${semanticVersion}","repositoryName": "devops_pipeline_demo"}],"stageName": "deploy"}""")
 			snDevOpsChange()
                         echo "deploy in prod"
                    }
                 }
             }
         }
-	
+
     }
 
 }
-

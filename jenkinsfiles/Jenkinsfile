@@ -25,10 +25,10 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') { 
+        stage('Deploy') {
             steps {
                 echo '------ Deploying ------'
-                //sh './jenkins/scripts/deliver.sh' 
+                //sh './jenkins/scripts/deliver.sh'
             }
         }
     }
