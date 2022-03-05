@@ -12,7 +12,7 @@ read -r -p "Please enter Y to continue: " RESPONSE
 
 if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-    cd .hooks
+    cd .githooks
     for hook in $(ls)
     do
         cp $hook ../.git/hooks
