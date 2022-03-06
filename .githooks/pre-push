@@ -11,6 +11,8 @@ CWD=`pwd`
 
 # Move to the project directory which you want to compile
 
+echo '-------------------- MAVEN TEST-COMPILE STARTED -----------------------------'
+
 mvn test-compile
 if [ $? -ne 0 ]; then
   cd $CWD
