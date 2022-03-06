@@ -12,6 +12,7 @@ CWD=`pwd`
 # Move to the project directory which you want to compile
 
 echo '-------------------- MAVEN TEST-COMPILE STARTED -----------------------------'
+printf "\n\n"
 
 mvn test-compile
 if [ $? -ne 0 ]; then
@@ -19,6 +20,7 @@ if [ $? -ne 0 ]; then
   echo 'Git Push [ABORTED] >-----------> because of existing issues, Please check logs!'
   exit 1
 else
+    printf "\n\n"
     echo 'Compilation Status: No issues found >--------------------------> [SUCCESSFUL]'
     echo 'Git Push >-----------------------------------------------------> [SUCCESSFUL]'
 fi
