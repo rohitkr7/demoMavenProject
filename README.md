@@ -7,7 +7,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 
 ### Version controlled git-hooks:
 * ProjectDirectory/.githooks
-    * <b>pre-commit</b>
+    >### pre-commit ::
     ```sh
     # ------------------- Check for white-space error -------------------- #
     # Check if this is the initial commit
@@ -31,7 +31,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
         exit 0
     fi
     ```
-    * <b>prepare-commit-msg</b>
+    >### prepare-commit-msg ::
     ```sh
     #Append commit message with STRY, DEF, BAK tickets or MAINT
 
@@ -51,48 +51,65 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     then
         #echo "branch name cotains hyphen"
         separator="-"
-    else
-        separator=""
     fi
 
     arr=(${CURRENT_BRANCH//${separator}/ })
     CURRENT_BRANCH=${arr[0]}
 
-    echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
+    # echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
 
     # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
 
     PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
     COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
+    MIN_COMMIT_LENGTH=5
+
+    if [[ ${#COMMIT_MESSAGE} < $MIN_COMMIT_LENGTH ]]
+    then
+        echo 'Commit message is too short..... Commit --------------------------> [ABORTED]'
+        exit 1;
+    fi
+
+
     if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
     then
         TICKET="${BASH_REMATCH[0]}"
         # echo "TICKET IS = "${TICKET}
         
-        if [[ $COMMIT_MESSAGE =~ $TICKET ]]
+        if [[ ! $COMMIT_MESSAGE =~ $TICKET ]]
         then
-            exit 0;
-        fi
+            echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
 
-        echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
-
-        if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
-        then
-            echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+            if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
+            then
+                echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+                echo "Ticket '${TICKET}', was appended to the commit message!......................"
+                echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
+            else
+                echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
+                echo "TEST: was pre-fixed to the commit message...................................."
+                echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
+            fi
         else
-            echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
-            echo "TEST: was pre-fixed to the commit message"
+            if [[ $COMMIT_MESSAGE != "TEST"* ]] && [[ $COMMIT_MESSAGE != "test"* ]] && [[ $COMMIT_MESSAGE != "MAINT"* ]] && [[ $COMMIT_MESSAGE != "maint"* ]]
+            then
+                echo "TEST: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+                echo "TEST: was pre-fixed to the commit message...................................."
+                echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
+            fi
         fi
 
     elif [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
     then
+        echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         exit 0;
     else
         echo "TEST: "${COMMIT_MESSAGE} > $COMMIT_MSG_FILE
-        echo "TEST: was pre-fixed to the commit message"
+        echo "TEST: was pre-fixed to the commit message...................................."
+        echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
     fi
     ```
-    * <b>pre-push</b>
+    >### pre-push ::
     ```sh
     # ------------------- Compile Maven Project -------------------- #
 
@@ -116,8 +133,9 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     fi
     cd $CWD
     ```
-### Master git-hooks installer:
-* ProjectDirectory/install_hooks.sh
+
+    >## Master git-hooks installer:
+    * ProjectDirectory/install_hooks.sh
     ```sh
     #Installs the hooks into your githooks directory
 
@@ -140,16 +158,15 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     fi
 
     echo "Hooks installed successfully"
-
     ```
 
-### Makefile for setups:
-* makefile
-    ```makefile
+  >## Makefile for setups:
+  * makefile
+  ```makefile
     all: say_hello change_hooks_config
     # all: say_hello generate_textfiles clean_textfiles
     # Note - First Line of the make file is always the default goal/target 
-    # so, it gets executed everytime
+        # so, it gets executed everytime
     say_hello:
             echo "Hello World"
 
@@ -173,7 +190,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     change_hooks_config:
             echo "Modifying git hook config"
             git config core.hooksPath .githooks
-    ``` 
+  ```
 
 <!-- <p align="center">
   <img src="./img/why.png" alt="Statoscope example" width="650">
