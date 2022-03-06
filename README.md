@@ -7,47 +7,111 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 
 ### Version controlled git-hooks:
 * ProjectDirectory/.githooks
-    * pre-commit
+    * <b>pre-commit</b>
     ```sh
-    CWD=`pwd`
-    # Move to the project directory which you want to build
-    # cd glide-template
-    # Build the maven  project
-    mvn clean verify -Dmaven.test.skip=true
-    if [ $? -ne 0 ]; then
-    cd $CWD
-    exit 1
+    # ------------------- Check for white-space error -------------------- #
+    # Check if this is the initial commit
+    if git rev-parse --verify HEAD >/dev/null 2>&1
+    then
+        echo "pre-commit: About to create a new commit..."
+        against=HEAD
+    else
+        echo "pre-commit: About to create the first commit..."
+        against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
     fi
-    cd $CWD
+
+    # Use git diff-index to check for whitespace errors
+    echo "pre-commit: Testing for whitespace errors..."
+    if ! git diff-index --check --cached $against
+    then
+        echo "pre-commit: Aborting commit due to whitespace errors"
+        exit 1
+    else
+        echo "pre-commit: No whitespace errors :)"
+        exit 0
+    fi
     ```
-    * prepare-commit-msg
+    * <b>prepare-commit-msg</b>
     ```sh
-    #Prepends commit message with STRY, DEF, BAK tickets or MAINT
+    #Append commit message with STRY, DEF, BAK tickets or MAINT
 
     COMMIT_MSG_FILE=$1
     COMMIT_SOURCE=$2
     SHA1=$3
 
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    if [ $CURRENT_BRANCH == "HEAD" ]
+    # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
+
+    separator=""
+    if [[ $CURRENT_BRANCH == *"_"* ]]
     then
-        exit 0;
+    #echo "branch name cotains underscore"
+    separator="_"
+    elif [[ $CURRENT_BRANCH == *"-"* ]]
+    then
+        #echo "branch name cotains hyphen"
+        separator="-"
+    else
+        separator=""
     fi
 
-    PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint)[0-9]*)"
+    arr=(${CURRENT_BRANCH//${separator}/ })
+    CURRENT_BRANCH=${arr[0]}
+
+    echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
+
+    # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
+
+    PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
+    COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
     if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
     then
         TICKET="${BASH_REMATCH[0]}"
-        COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
+        # echo "TICKET IS = "${TICKET}
         
         if [[ $COMMIT_MESSAGE =~ $TICKET ]]
         then
             exit 0;
         fi
 
-        echo "${TICKET}: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
-        echo "Ticket '${TICKET}', matched in current branch name, prepended to commit message."
+        echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
+
+        if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
+        then
+            echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+        else
+            echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
+            echo "TEST: was pre-fixed to the commit message"
+        fi
+
+    elif [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
+    then
+        exit 0;
+    else
+        echo "TEST: "${COMMIT_MESSAGE} > $COMMIT_MSG_FILE
+        echo "TEST: was pre-fixed to the commit message"
     fi
+    ```
+    * <b>pre-push</b>
+    ```sh
+    # ------------------- Compile Maven Project -------------------- #
+
+    #changes directory to glide-template and runs mvn clean verify
+
+    CWD=`pwd`
+
+    # Get the path of the files which are getting modified
+    # need to write code
+
+    # Move to the project directory which you want to compile
+
+    mvn test-compile
+    if [ $? -ne 0 ]; then
+    cd $CWD
+    echo 'Git Push ABORTED because of existing issues, Please check logs!'
+    exit 1
+    fi
+    cd $CWD
     ```
 ### Master git-hooks installer:
 * ProjectDirectory/install_hooks.sh
@@ -73,11 +137,12 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     fi
 
     echo "Hooks installed successfully"
+
     ```
 
 ### Makefile for setups:
 * makefile
-    ```Makefile
+    ```makefile
     all: say_hello change_hooks_config
     # all: say_hello generate_textfiles clean_textfiles
     # Note - First Line of the make file is always the default goal/target 
@@ -129,7 +194,8 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 3. There is a `Makefile` inside the project directory which is an easy to go step to do all the githooks setups in just one signle shot command which is `make`.
 
 * make file will first of all run ./install_hooks.sh or just set the `git config core.hooksPath`.
-* <b>pre-commit</b> has the code to build the project using maven comamnd `mvn clean verify -Dmaven.test.skip=true`
+* <b>pre-commit</b> script looks for white-space errors in any of the newly added or modified files.
+* <b>pre-push</b> has the code to build the project using maven comamnd `mvn clean verify -Dmaven.test.skip=true` before doing the actual push to the remote repository.
 * <b>prepare-commit-msg</b> has code to update commit message according to the branch name. If the branch name contains any defect, story or testcase number in that case the same will be appended to the start of the commit message also.
 
 <!-- <details><summary><b>Show instructions</b></summary>
@@ -144,7 +210,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 
 
 ### Setup
-* Fire Below command
+* Fire Below command inside the project directory ::
     ```sh
     make
     ```
