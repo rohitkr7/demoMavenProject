@@ -43,18 +43,18 @@ then
         if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
         then
             echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
-            echo "Ticket '${TICKET}', was appended to the commit message!"
+            echo "Ticket '${TICKET}', was appended to the commit message!......................"
             echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         else
             echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
-            echo "TEST: was pre-fixed to the commit message"
+            echo "TEST: was pre-fixed to the commit message...................................."
             echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         fi
     else
         if [[ $COMMIT_MESSAGE != "TEST"* ]] && [[ $COMMIT_MESSAGE != "test"* ]] && [[ $COMMIT_MESSAGE != "MAINT"* ]] && [[ $COMMIT_MESSAGE != "maint"* ]]
         then
             echo "TEST: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
-            echo "TEST: was pre-fixed to the commit message"
+            echo "TEST: was pre-fixed to the commit message...................................."
             echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         fi
     fi
@@ -65,6 +65,6 @@ then
     exit 0;
 else
     echo "TEST: "${COMMIT_MESSAGE} > $COMMIT_MSG_FILE
-    echo "TEST: was pre-fixed to the commit message"
+    echo "TEST: was pre-fixed to the commit message...................................."
     echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
 fi
