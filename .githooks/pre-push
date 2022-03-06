@@ -23,5 +23,6 @@ else
     printf "\n\n"
     echo 'Compilation Status: No issues found >--------------------------> [SUCCESSFUL]'
     echo 'Git Push >-----------------------------------------------------> [SUCCESSFUL]'
+    printf '\n\n'
 fi
 cd $CWD
