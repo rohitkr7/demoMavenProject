@@ -1,0 +1,38 @@
+image: maven:3.6.3-jdk-8
+stages:
+  - build
+  - test
+  - deploy
+  - prod
+
+build:
+  stage: build
+  tags:
+    - local-runner1
+  script:
+    - mvn clean install -DskipTests
+test:
+  stage: test
+  tags:
+    - local-runner1
+  script:
+    - echo 'test'
+deploy:
+  stage: deploy
+  tags:
+    - local-runner1
+  script:
+    - mvn clean test
+  when: manual
+  artifacts:
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+prod:
+  stage: prod
+  tags:
+    - local-runner1
+  allow_failure: false
+  script:
+    - echo 'prod'
+  when: manual
