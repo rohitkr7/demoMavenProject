@@ -36,25 +36,32 @@ then
     TICKET="${BASH_REMATCH[0]}"
     # echo "TICKET IS = "${TICKET}
     
-    if [[ $COMMIT_MESSAGE =~ $TICKET ]]
+    if [![ $COMMIT_MESSAGE =~ $TICKET ]]
     then
-        exit 0;
-    fi
+        echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
 
-    echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
-
-    if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
-    then
-        echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+        if [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
+        then
+            echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
+            echo "Ticket '${TICKET}', was appended to the commit message!"
+        else
+            echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
+            echo "TEST: was pre-fixed to the commit message"
+        fi
     else
-        echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
-        echo "TEST: was pre-fixed to the commit message"
+        if [[ $COMMIT_MESSAGE != "TEST"* ]] && [[ $COMMIT_MESSAGE != "test"* ]] && [[ $COMMIT_MESSAGE != "MAINT"* ]] && [[ $COMMIT_MESSAGE != "maint"* ]]
+        then
+            echo "TEST: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
+            echo "TEST: was pre-fixed to the commit message"
+        fi
     fi
 
 elif [[ $COMMIT_MESSAGE == "MAINT"* ]] || [[ $COMMIT_MESSAGE == "TEST"* ]] || [[ $COMMIT_MESSAGE == "test"* ]] || [[ $COMMIT_MESSAGE == "maint"* ]]
 then
+    echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
     exit 0;
 else
     echo "TEST: "${COMMIT_MESSAGE} > $COMMIT_MSG_FILE
     echo "TEST: was pre-fixed to the commit message"
+    echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
 fi
