@@ -108,8 +108,11 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
     mvn test-compile
     if [ $? -ne 0 ]; then
     cd $CWD
-    echo 'Git Push ABORTED because of existing issues, Please check logs!'
+    echo 'Git Push [ABORTED] >-----------> because of existing issues, Please check logs!'
     exit 1
+    else
+        echo 'Compilation Status: No issues found >--------------------------> [SUCCESSFUL]'
+        echo 'Git Push >-----------------------------------------------------> [SUCCESSFUL]'
     fi
     cd $CWD
     ```
