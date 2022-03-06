@@ -14,8 +14,9 @@ CWD=`pwd`
 echo '-------------------- MAVEN TEST-COMPILE STARTED -----------------------------'
 printf "\n\n"
 
-MAVEN_COMPILATION_LOG=$(mvn test-compile)
-echo 'MAVEN_COMPILATION_LOG '$MAVEN_COMPILATION_LOG
+# MAVEN_COMPILATION_LOG=$(mvn test-compile)
+# echo "$MAVEN_COMPILATION_LOG"
+mvn test-compile
 if [ $? -ne 0 ]; then
   cd $CWD
   echo 'Git Push [ABORTED] >-----------> because of existing issues, Please check logs!'
