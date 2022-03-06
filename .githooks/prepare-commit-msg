@@ -30,8 +30,12 @@ CURRENT_BRANCH=${arr[0]}
 PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
 COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
 MIN_COMMIT_LENGTH=5
+COMMIT_MESSAGE_LENGTH=$(echo -n "$COMMIT_MESSAGE" | wc -c)
 
-if [[ ${#COMMIT_MESSAGE} < $MIN_COMMIT_LENGTH ]]
+echo 'COMMIT_MESSAGE_LENGTH = '$COMMIT_MESSAGE_LENGTH
+echo 'MIN_COMMIT_LENGTH = '$MIN_COMMIT_LENGTH
+
+if [[ $COMMIT_MESSAGE_LENGTH -lt $MIN_COMMIT_LENGTH ]]
 then
     echo 'Commit message is too short..... Commit --------------------------> [ABORTED]'
     exit 1;

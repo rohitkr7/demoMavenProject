@@ -13,7 +13,7 @@ else
 fi
 
 # Use git diff-index to check for whitespace errors
-echo "[pre-commit]: Testing for whitespace errors..."
+echo "[pre-commit]: Testing for whitespace errors.................................."
 if ! git diff-index --check --cached $against
 then
     echo "[pre-commit]: commit [ABORTED] due to whitespace errors >---------> [FAILURE]"
