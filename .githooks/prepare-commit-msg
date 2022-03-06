@@ -32,15 +32,13 @@ COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
 MIN_COMMIT_LENGTH=5
 COMMIT_MESSAGE_LENGTH=$(echo -n "$COMMIT_MESSAGE" | wc -c)
 
-echo 'COMMIT_MESSAGE_LENGTH = '$COMMIT_MESSAGE_LENGTH
-echo 'MIN_COMMIT_LENGTH = '$MIN_COMMIT_LENGTH
-
 if [[ $COMMIT_MESSAGE_LENGTH -lt $MIN_COMMIT_LENGTH ]]
 then
+    echo 'COMMIT_MESSAGE_LENGTH = '$COMMIT_MESSAGE_LENGTH
+    echo 'MIN_COMMIT_LENGTH = '$MIN_COMMIT_LENGTH
     echo 'Commit message is too short..... Commit --------------------------> [ABORTED]'
     exit 1;
 fi
-
 
 if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
