@@ -36,7 +36,7 @@ then
     TICKET="${BASH_REMATCH[0]}"
     # echo "TICKET IS = "${TICKET}
     
-    if [![ $COMMIT_MESSAGE =~ $TICKET ]]
+    if [[ ! $COMMIT_MESSAGE =~ $TICKET ]]
     then
         echo "Ticket '${TICKET}', matched in current branch name, appended to commit message."
 
@@ -44,15 +44,18 @@ then
         then
             echo ${COMMIT_MESSAGE}" - "${TICKET} > $COMMIT_MSG_FILE
             echo "Ticket '${TICKET}', was appended to the commit message!"
+            echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         else
             echo "TEST: ${COMMIT_MESSAGE} - ${TICKET}" > $COMMIT_MSG_FILE
             echo "TEST: was pre-fixed to the commit message"
+            echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         fi
     else
         if [[ $COMMIT_MESSAGE != "TEST"* ]] && [[ $COMMIT_MESSAGE != "test"* ]] && [[ $COMMIT_MESSAGE != "MAINT"* ]] && [[ $COMMIT_MESSAGE != "maint"* ]]
         then
             echo "TEST: ${COMMIT_MESSAGE}" > $COMMIT_MSG_FILE
             echo "TEST: was pre-fixed to the commit message"
+            echo "Commit Status >------------------------------------------------> [SUCCESSFUL]"
         fi
     fi
 
