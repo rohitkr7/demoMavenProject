@@ -5,6 +5,10 @@
 
 This project contains a Maven project with tests. Git-Hooks are configured and being version controlled.
 
+## Project Structure ::
+<p align="center">
+  <img src="./img/project-structure.png" alt="Project Structure" width="650">
+
 ### Version controlled git-hooks:
 * ProjectDirectory/.githooks
     >### pre-commit ::
@@ -198,16 +202,15 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
             echo "Modifying git hook config"
             git config core.hooksPath .githooks
   ```
-<!-- <p align="center">
-  <img src="./img/why.png" alt="Statoscope example" width="650">
-</p>
 
+<!--
 <p align="center">
   <a href="https://evilmartians.com/?utm_source=size-limit">
     <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg"
          alt="Sponsored by Evil Martians" width="236" height="54">
   </a>
-</p> -->
+</p>  -->
+
 
 
 <!-- * [MobX](https://github.com/mobxjs/mobx) -->
