@@ -22,5 +22,7 @@ then
     exit 1
 else
     echo "[pre-commit]: No whitespace errors >---------------------------> [SUCCESSFUL]"
-    exit 0
+    # exit 0
 fi
+
+# ------------------------ List of modified files ----------------------------- #

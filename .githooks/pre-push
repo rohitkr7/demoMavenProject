@@ -14,6 +14,8 @@ CWD=`pwd`
 echo '-------------------- MAVEN TEST-COMPILE STARTED -----------------------------'
 printf "\n\n"
 
+# MAVEN_COMPILATION_LOG=$(mvn test-compile)
+# echo "$MAVEN_COMPILATION_LOG"
 mvn test-compile
 if [ $? -ne 0 ]; then
   cd $CWD
@@ -23,5 +25,6 @@ else
     printf "\n\n"
     echo 'Compilation Status: No issues found >--------------------------> [SUCCESSFUL]'
     echo 'Git Push >-----------------------------------------------------> [SUCCESSFUL]'
+    printf '\n\n'
 fi
 cd $CWD

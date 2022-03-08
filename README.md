@@ -191,7 +191,6 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
             echo "Modifying git hook config"
             git config core.hooksPath .githooks
   ```
-
 <!-- <p align="center">
   <img src="./img/why.png" alt="Statoscope example" width="650">
 </p>
