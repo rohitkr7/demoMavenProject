@@ -41,35 +41,42 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
     # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
+    PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
+    PREFIX_REGEX_UNDERSCORE="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
+    PREFIX_REGEX_HYPHEN="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(-*).*"
 
     separator=""
-    if [[ $CURRENT_BRANCH == *"_"* ]]
+    if [[ $CURRENT_BRANCH == "$PREFIX_REGEX"* ]]
     then
-    #echo "branch name cotains underscore"
-    separator="_"
-    elif [[ $CURRENT_BRANCH == *"-"* ]]
-    then
-        #echo "branch name cotains hyphen"
-        separator="-"
+        if [[ $CURRENT_BRANCH == "$PREFIX_REGEX_UNDERSCORE"* ]]
+        then
+            #echo "branch name cotains underscore"
+            separator="_"
+        elif [[ $CURRENT_BRANCH == "$PREFIX_REGEX_HYPHEN"* ]]
+        then
+            #echo "branch name cotains hyphen"
+            separator="-"
+        fi
+        arr=(${CURRENT_BRANCH//${separator}/ })
+        # Modify the current branch value as only the workitem (def/stry/tntc) number
+        CURRENT_BRANCH=${arr[0]}
     fi
-
-    arr=(${CURRENT_BRANCH//${separator}/ })
-    CURRENT_BRANCH=${arr[0]}
 
     # echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
 
     # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
 
-    PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
     COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
     MIN_COMMIT_LENGTH=5
+    COMMIT_MESSAGE_LENGTH=$(echo -n "$COMMIT_MESSAGE" | wc -c)
 
-    if [[ ${#COMMIT_MESSAGE} < $MIN_COMMIT_LENGTH ]]
+    if [[ $COMMIT_MESSAGE_LENGTH -lt $MIN_COMMIT_LENGTH ]]
     then
+        echo 'COMMIT_MESSAGE_LENGTH = '$COMMIT_MESSAGE_LENGTH
+        echo 'MIN_COMMIT_LENGTH = '$MIN_COMMIT_LENGTH
         echo 'Commit message is too short..... Commit --------------------------> [ABORTED]'
         exit 1;
     fi
-
 
     if [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
     then
