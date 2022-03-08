@@ -8,13 +8,14 @@ SHA1=$3
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 # echo "CURRENT_BRANCH = "${CURRENT_BRANCH}
+PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
 
 separator=""
-if [[ $CURRENT_BRANCH == *"_"* ]]
+if [[ $CURRENT_BRANCH == *"_"* ]] && [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
   #echo "branch name cotains underscore"
   separator="_"
-elif [[ $CURRENT_BRANCH == *"-"* ]]
+elif [[ $CURRENT_BRANCH == *"-"* ]] && [[ $CURRENT_BRANCH =~ $PREFIX_REGEX ]]
 then
     #echo "branch name cotains hyphen"
     separator="-"
@@ -27,7 +28,7 @@ CURRENT_BRANCH=${arr[0]}
 
 # PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)(_*).*"
 
-PREFIX_REGEX="((DEF|BAK|STRY|MAINT|def|bak|stry|maint|TNTC)[0-9]*)"
+
 COMMIT_MESSAGE=$(cat $COMMIT_MSG_FILE)
 MIN_COMMIT_LENGTH=5
 COMMIT_MESSAGE_LENGTH=$(echo -n "$COMMIT_MESSAGE" | wc -c)
