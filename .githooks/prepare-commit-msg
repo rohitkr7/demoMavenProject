@@ -24,12 +24,10 @@ then
         #echo "branch name cotains hyphen"
         separator="-"
     fi
+    arr=(${CURRENT_BRANCH//${separator}/ })
+    # Modify the current branch value as only the workitem (def/stry/tntc) number
+    CURRENT_BRANCH=${arr[0]}
 fi
-
-arr=(${CURRENT_BRANCH//${separator}/ })
-
-# Modify the current branch value as only the workitem (def/stry/tntc) number
-CURRENT_BRANCH=${arr[0]}
 
 # echo "CURRENT_BRANCH = "${CURRENT_BRANCH} #
 
