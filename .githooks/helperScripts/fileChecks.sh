@@ -92,14 +92,6 @@ do
     if [[ "$mf" == *java ]];
     then
         IFS=$'\n'
-        # grep -nB 1 "public.*[\(]" "$mf"
-
-        # Find matching lines in the file using grep command and a pattern
-        # methodLists=($(grep "@Story(" "$mf"))
-        # for mLine in ${methodLists[@]}
-        # do
-        #     printf $mf' contains story annotation'
-        # done
 
         if ! grep -q "@Story(\|@TestCase(\|@Defect(" "$mf"
         then
