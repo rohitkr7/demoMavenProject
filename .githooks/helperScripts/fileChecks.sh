@@ -40,47 +40,84 @@ do
     prevLineWasDash=true
     prevLineAnnotationPresent=false
     if [[ "$mf" == *java ]];
-        then
-            printf "$mf\n"
-            # Read the file content in a variable and print
-            #value=`cat $mf`
-            #echo "$value"
-            IFS=$'\n'
-            # grep -nB 1 "public.*[\(]" "$mf"
+    then
+        printf "$mf\n"
+        # Read the file content in a variable and print
+        #value=`cat $mf`
+        #echo "$value"
+        IFS=$'\n'
+        # grep -nB 1 "public.*[\(]" "$mf"
 
-            # Find matching lines in the file using grep command and a pattern
-            methodLists=($(grep -nB 1 "public.*[\(]" "$mf"))
+        # Find matching lines in the file using grep command and a pattern
+        methodLists=($(grep -nB 1 "public.*[\(]" "$mf"))
 
-            for mLine in ${methodLists[@]}
-            do
-                #printf $mLine
-                if [[ $mLine == '--'* ]];
+        for mLine in ${methodLists[@]}
+        do
+            #printf $mLine
+            if [[ $mLine == '--'* ]];
+            then
+                prevLineWasDash=true
+                prevLineAnnotationPresent=false
+                continue
+            fi
+            if [[ $prevLineWasDash == true ]]
+            then
+                #printf 'inside prevLineWasDash == false block\n'
+                if [[ $mLine == *'@Test'* || $mLine == *'@Step'* ]];
                 then
-                    prevLineWasDash=true
+                    #printf "line starts with @Test\n"
+                    prevLineAnnotationPresent=true
+                else
+                    #printf "line does not starts with @Test\n"
                     prevLineAnnotationPresent=false
-                    continue
                 fi
-                if [[ $prevLineWasDash == true ]]
-                then
-                    printf 'inside prevLineWasDash == false block\n'
-                    if [[ $mLine == *'@Test'* || $mLine == *'@Step'* ]];
-                    then
-                        printf "line starts with @Test\n"
-                        prevLineAnnotationPresent=true
-                    else
-                        printf "line does not starts with @Test\n"
-                        prevLineAnnotationPresent=false
-                    fi
-                    prevLineWasDash=false
-                    continue
-                fi
-                if [[ $prevLineWasDash == false && $prevLineAnnotationPresent == false ]];
-                then
-                    printf "[WARNING] >> $mLine\n"
-                fi
-            done
+                prevLineWasDash=false
+                continue
+            fi
+            if [[ $prevLineWasDash == false && $prevLineAnnotationPresent == false ]];
+            then
+                printf "[WARNING] >> $mLine ***** please update to private access modifier instead of public *****\n"
+            fi
+        done
+    fi
+    printf "\n------------------------------------------\n"
+done
+printf "\n------------------------------------------\n"
+
+# ------------------------------------------------------------------------------------ #
+# Rule4: Story number, Defect number, Testcase id should be mentioned
+
+for mf in "${modifiedFilesList[@]}"
+do
+    if [[ "$mf" == *java ]];
+    then
+        IFS=$'\n'
+        # grep -nB 1 "public.*[\(]" "$mf"
+
+        # Find matching lines in the file using grep command and a pattern
+        # methodLists=($(grep "@Story(" "$mf"))
+        # for mLine in ${methodLists[@]}
+        # do
+        #     printf $mf' contains story annotation'
+        # done
+
+        if ! grep -q "@Story(\|@TestCase(\|@Defect(" "$mf"
+        then
+            echo '[WARNING] @Story/@TestCase/@Defect not found in '$mf
+        fi
     fi
 done
 printf "\n------------------------------------------\n"
+
+
+
+
+
+
+
+
+
+
+
 
 IFS=$PREV_IFS
