@@ -31,13 +31,14 @@ done
 
 # ----------------- Filter out files as per their extension and run checks -----------------
 ################## JAVA ##################
+# Rule1: Methods of the Test class should be declared as private.
 PREV_IFS=$IFS
-prevLineWasDash=true
-prevLineAnnotationPresent=false
 
 echo 'List of modifed Java files: ------------------>> '
 for mf in "${modifiedFilesList[@]}"
 do
+    prevLineWasDash=true
+    prevLineAnnotationPresent=false
     if [[ "$mf" == *java ]];
         then
             printf "$mf\n"
@@ -62,7 +63,7 @@ do
                 if [[ $prevLineWasDash == true ]]
                 then
                     printf 'inside prevLineWasDash == false block\n'
-                    if [[ $mLine == *'@Test'* ]];
+                    if [[ $mLine == *'@Test'* || $mLine == *'@Step'* ]];
                     then
                         printf "line starts with @Test\n"
                         prevLineAnnotationPresent=true
