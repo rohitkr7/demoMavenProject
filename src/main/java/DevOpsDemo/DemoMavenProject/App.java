@@ -1,4 +1,4 @@
-package DevOpsDemo.DemoMavenProject;
+package DevOpsDemo;
 
 /**
  * Hello world!

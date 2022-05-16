@@ -1,4 +1,4 @@
-package DevOpsDemo.Calculator;
+package DevOpsDemo;
 
 import static org.junit.Assert.assertTrue;
 
