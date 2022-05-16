@@ -63,7 +63,7 @@ jobs:
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
           job-name: 'Build'
-          xml-report-filename: '**/surefire-reports/TEST-*.xml'
+          xml-report-filename: target/surefire-reports/TEST-*.xml
           
   integrationTest:
     needs: build
