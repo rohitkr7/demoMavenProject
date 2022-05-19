@@ -1,7 +1,7 @@
 # ----------------- Logic for gathering the list of files modified -----------------
 # command to get list of files which are modified
 clear
-str=$(git diff --name-only $(git merge-base master HEAD))
+str=$(git diff --name-only $(git merge-base master HEAD) & git ls-files --others --exclude-standard)
 echo 'List of modified files: ---------------------------------------------------------------->> '
 separator=" "
 modifiedFilesList=(${str//${separator}/ })
@@ -16,12 +16,13 @@ printf "\n----------------------------------------------------------------------
 # Rule1: Methods of the Test class should be declared as private.
 PREV_IFS=$IFS
 
-echo 'Scanning through all the Java files: --------------------------------------------------->> '
+echo 'Scanning through all the Modified Java files: --------------------------------------------------->> '
 for mf in "${modifiedFilesList[@]}"
 do
     prevLineWasDash=true
     prevLineAnnotationPresent=false
-    if [[ "$mf" == *java ]];
+    # check if file exists and extension is java
+    if [[ -f "$mf" && "$mf" == *IT\.java ]];
     then
         #printf "$mf\n"
         # Read the file content in a variable and print
@@ -71,7 +72,8 @@ printf "\n----------------------------------------------------------------------
 
 for mf in "${modifiedFilesList[@]}"
 do
-    if [[ "$mf" == *java ]];
+    # check if file exists and extension is java
+    if [[  -f "$mf" && "$mf" == **IT\.java ]];
     then
         IFS=$'\n'
 

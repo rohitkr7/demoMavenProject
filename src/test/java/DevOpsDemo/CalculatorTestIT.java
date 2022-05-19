@@ -4,7 +4,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class CalculatorTest {
+public class CalculatorTestIT {
 	Calculator calculator = new Calculator();
 
 	@Test
@@ -33,5 +33,9 @@ public class CalculatorTest {
 		// This test will check the multiply functionality of the test
 
 		assertTrue("Division function not working fine.", calculator.divide(3, 2) == 1);
+	}
+	@Test
+	public void helperMethod(){
+
 	}
 }
