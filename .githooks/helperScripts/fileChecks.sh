@@ -15,6 +15,7 @@ printf "\n----------------------------------------------------------------------
 ################## JAVA ##################
 # Rule1: Methods of the Test class should be declared as private.
 PREV_IFS=$IFS
+IFS=$'\n'
 
 echo 'Scanning through all the Modified Java files: --------------------------------------------------->> '
 for mf in "${modifiedFilesList[@]}"
@@ -73,13 +74,26 @@ printf "\n----------------------------------------------------------------------
 for mf in "${modifiedFilesList[@]}"
 do
     # check if file exists and extension is java
-    if [[  -f "$mf" && "$mf" == **IT\.java ]];
+    if [[  -f "$mf" && "$mf" == *IT\.java ]];
     then
-        IFS=$'\n'
-
         if ! grep -q "@Story(\|@TestCase(\|@Defect(" "$mf"
         then
             echo '[WARNING] @Story/@TestCase/@Defect not found in '$mf
+        fi
+    fi
+done
+printf "\n------------------------------------------------------------------------------------\n"
+
+# Rule18: If Java file has Test Method then the file name should end with *IT.java or *UIIT.java pattern
+for mf in "${modifiedFilesList[@]}"
+do
+    # check if file exists and extension is java
+    if [[  -f "$mf" && ( "$mf" != *IT\.java ) && ( "$mf" == *java) ]];
+    then
+        # printf 'file with no IT\ >> '$mf'\n'
+        if grep -q "@Story(\|@TestCase(\|@Defect(\|@Test\|@Step" "$mf"
+        then
+            echo '[WARNING] @Story/@TestCase/@Defect/@Test/@Step found in '$mf' but file name does not end with IT or UIIT\n'
         fi
     fi
 done
