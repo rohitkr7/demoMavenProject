@@ -203,13 +203,7 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
             git config core.hooksPath .githooks
   ```
 
-<!--
-<p align="center">
-  <a href="https://evilmartians.com/?utm_source=size-limit">
-    <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg"
-         alt="Sponsored by Evil Martians" width="236" height="54">
-  </a>
-</p>  -->
+
 
 
 
