@@ -13,11 +13,12 @@ printf "\n----------------------------------------------------------------------
 
 # ----------------- Filter out files as per their extension and run checks -----------------
 ################## JAVA ##################
-# Rule1: Methods of the Test class should be declared as private.
+# Rule - 1: Methods of the Test class should be declared as private.
 PREV_IFS=$IFS
 IFS=$'\n'
 
 echo 'Scanning through all the Modified Java files: --------------------------------------------------->> '
+echo 'Rule - 1: Methods of the Test class should be declared as private ===>>\n'
 for mf in "${modifiedFilesList[@]}"
 do
     prevLineWasDash=true
@@ -69,8 +70,8 @@ done
 printf "\n------------------------------------------------------------------------------------\n"
 
 # ------------------------------------------------------------------------------------ #
-# Rule4: Story number, Defect number, Testcase id should be mentioned
-
+# Rule - 4: Story number, Defect number, Testcase id should be mentioned
+printf 'Rule - 4: Story number, Defect number, Testcase id should be mentioned ===>> \n\n'
 for mf in "${modifiedFilesList[@]}"
 do
     # check if file exists and extension is java
@@ -84,7 +85,8 @@ do
 done
 printf "\n------------------------------------------------------------------------------------\n"
 
-# Rule18: If Java file has Test Method then the file name should end with *IT.java or *UIIT.java pattern
+# Rule - 7: If Java file has Test Method then the file name should end with *IT.java or *UIIT.java pattern
+printf 'Rule - 7: Test Java file name checks ====>\n\n'
 for mf in "${modifiedFilesList[@]}"
 do
     # check if file exists and extension is java
@@ -99,8 +101,39 @@ do
 done
 printf "\n------------------------------------------------------------------------------------\n"
 
+# Rule - 6: Constants should be upper case
+printf 'Rule - 6: Constants Variable Name Check ====>\n\n'
+for mf in "${modifiedFilesList[@]}"
+do
+    noWarningsFlag=true
+    # check if file exists and extension is java
+    if [[  -f "$mf" && "$mf" == *java ]];
+    then
+        #printf 'Constants Check - Scanning File: '$mf
+        constantVariablesList=($(grep -n ".*final.*[\=]" "$mf"))
 
+        for mLine in ${constantVariablesList[@]}
+        do
+            # printf "final constant: "$mLine
+            IFS=$'='
+            read -ra arrStr <<< "$mLine"
+            beforeEqualSign=${arrStr[0]}
+            #printf  'beforeEqualSign = '$beforeEqualSign'\n'
+            IFS=$' '
+            read -ra arrStr <<< "$beforeEqualSign"
+            variableName=${arrStr[${#arrStr[@]}-1]}
+            #printf 'variableName== '$variableName
+            upperCaseValue=$(echo $variableName | tr '[:lower:]' '[:upper:]')
+            if [[ ! $variableName == $upperCaseValue ]]
+            then
+                noWarningsFlag=false
+                printf "[WARNING] Please use uppercase constant names: ==>> "$variableName' <<== in the file:'$mf'\n'
+            fi
+            IFS=$'\n'
+        done
+    fi
 
+done
 
 
 
