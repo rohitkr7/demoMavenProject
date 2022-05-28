@@ -48,7 +48,7 @@ do
             if [[ $prevLineWasDash == true ]]
             then
                 #printf 'inside prevLineWasDash == false block\n'
-                if [[ $mLine == *'@Test'* || $mLine == *'@Step'* ]];
+                if [[ $mLine == *'@Test'* || $mLine == *'@Step'* || $mLine == *'@Before'* || $mLine == *'@BeforeClass'* || $mLine == *'@After'* || $mLine == *'@AfterClass'* ]];
                 then
                     #printf "line starts with @Test\n"
                     prevLineAnnotationPresent=true
@@ -152,20 +152,20 @@ do
     if [[  -f "$mf" && "$mf" == *java ]];
     then
         # grep all variable names which contains underscores
-        variableNames=($(grep -n ".*[_].*=.*[\;]" "$mf" | grep -v ".*final.*"))
+        variableNames=($(grep -n ".*[_].*=.*[\;]" "$mf" | grep -v ".*final.*" | grep -v ".*==.*"))
 
         for mLine in ${variableNames[@]}
         do
             printf "[WARNING] Use camelCase variable Names without undescores: ==>> "$mLine' <<== in the file:'$mf'\n'
         done
 
-
-        methodNames=($(grep -n ".*_.*[\{]" "$mf"))
+        methodNames=($(grep -n ".*_.*{" "$mf"))
         for mLine in ${methodNames[@]}
         do
             printf "[WARNING] Use camelCase method Names without undescores: ==>> "$mLine' <<== in the file:'$mf'\n'
         done
 
+        printf "\n"
     fi
 
 done
