@@ -85,8 +85,8 @@ do
 done
 printf "\n------------------------------------------------------------------------------------\n"
 
-# Rule - 7: If Java file has Test Method then the file name should end with *IT.java or *UIIT.java pattern
-printf 'Rule - 7: Test Java file name checks ====>\n\n'
+# Rule - 8: If Java file has Test Method then the file name should end with *IT.java or *UIIT.java pattern
+printf 'Rule - 8: Test Java file name checks ====>\n\n'
 for mf in "${modifiedFilesList[@]}"
 do
     # check if file exists and extension is java
@@ -101,8 +101,8 @@ do
 done
 printf "\n------------------------------------------------------------------------------------\n"
 
-# Rule - 6: Constants should be upper case
-printf 'Rule - 6: Constants Variable Name Check ====>\n\n'
+# Rule - 7: Constants should be upper case
+printf 'Rule - 7: Constants Variable Name Check ====>\n\n'
 for mf in "${modifiedFilesList[@]}"
 do
     noWarningsFlag=true
@@ -134,9 +134,40 @@ do
     fi
 
 done
+printf "\n------------------------------------------------------------------------------------\n"
+
+# Grep Method Names, which has underscore in its name >>
+# grep -n ".*_.*[\{]" src/test/java/DevOpsDemo/CalculatorTestIT.java
 
 
+# Grep variable Names, which has underscore in its name >>
+# grep -n ".*_.*[\{]" src/test/java/DevOpsDemo/CalculatorTestIT.java
 
+# Rule - 5: Camel case variable naming standards
+printf 'Rule - 5 & 6: Camel case variable/method naming standards ====>\n\n'
+for mf in "${modifiedFilesList[@]}"
+do
+    noWarningsFlag=true
+    # check if file exists and extension is java
+    if [[  -f "$mf" && "$mf" == *java ]];
+    then
+        variableNames=($(grep -n ".*[_-].*[\;]" "$mf" | grep -v ".*final.*"))
+
+        for mLine in ${variableNames[@]}
+        do
+            printf "[WARNING] Use camelCase variable Names without undescore/hyphen: ==>> "$mLine' <<== in the file:'$mf'\n'
+        done
+
+
+        methodNames=($(grep -n ".*_.*[\{]" "$mf"))
+        for mLine in ${methodNames[@]}
+        do
+            printf "[WARNING] Use camelCase method Names without undescore/hyphen: ==>> "$mLine' <<== in the file:'$mf'\n'
+        done
+
+    fi
+
+done
 
 
 
