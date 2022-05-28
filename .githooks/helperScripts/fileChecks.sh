@@ -151,18 +151,19 @@ do
     # check if file exists and extension is java
     if [[  -f "$mf" && "$mf" == *java ]];
     then
-        variableNames=($(grep -n ".*[_-].*[\;]" "$mf" | grep -v ".*final.*"))
+        # grep all variable names which contains underscores
+        variableNames=($(grep -n ".*[_].*[\;]" "$mf" | grep -v ".*final.*"))
 
         for mLine in ${variableNames[@]}
         do
-            printf "[WARNING] Use camelCase variable Names without undescore/hyphen: ==>> "$mLine' <<== in the file:'$mf'\n'
+            printf "[WARNING] Use camelCase variable Names without undescores: ==>> "$mLine' <<== in the file:'$mf'\n'
         done
 
 
         methodNames=($(grep -n ".*_.*[\{]" "$mf"))
         for mLine in ${methodNames[@]}
         do
-            printf "[WARNING] Use camelCase method Names without undescore/hyphen: ==>> "$mLine' <<== in the file:'$mf'\n'
+            printf "[WARNING] Use camelCase method Names without undescores: ==>> "$mLine' <<== in the file:'$mf'\n'
         done
 
     fi
