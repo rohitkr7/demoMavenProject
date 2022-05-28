@@ -152,7 +152,7 @@ do
     if [[  -f "$mf" && "$mf" == *java ]];
     then
         # grep all variable names which contains underscores
-        variableNames=($(grep -n ".*[_].*=[\;]" "$mf" | grep -v ".*final.*"))
+        variableNames=($(grep -n ".*[_].*=.*[\;]" "$mf" | grep -v ".*final.*"))
 
         for mLine in ${variableNames[@]}
         do
