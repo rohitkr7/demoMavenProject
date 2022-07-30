@@ -7,6 +7,14 @@ import org.junit.Test;
 public class CalculatorTestIT {
 	Calculator calculator = new Calculator();
 
+	final double Pi = 3.14;
+
+	final String first_name = "rohit";
+	String last_name = "roy_";
+
+	private final String FULL_NAME = "rohit";
+
+	
 	@Test
 	public void sumTest() {
 		// This test will check the sum functionality of the test
@@ -14,7 +22,7 @@ public class CalculatorTestIT {
 		assertTrue("Sum function not working fine.", calculator.sum(10, 20) == 30);
 	}
 
-	@Test
+
 	public void subtractTest() {
 		// This test will check the subtract functionality of the test
 
@@ -34,8 +42,9 @@ public class CalculatorTestIT {
 
 		assertTrue("Division function not working fine.", calculator.divide(3, 2) == 1);
 	}
+
 	@Test
-	public void helperMethod(){
+	public void helper_Method(){
 
 	}
 }

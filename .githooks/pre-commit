@@ -1,30 +1,6 @@
 #!/bin/bash
 source .githooks/helperScripts/fileChecks.sh
-commitAbortionFlag="n"
 # ------------------- Check for white-space error -------------------- #
-
-# Check if this is the initial commit
-if git rev-parse --verify HEAD >/dev/null 2>&1
-then
-    echo "[pre-commit]: About to create a new commit..................................."
-    against=HEAD
-else
-    echo "[pre-commit]: About to create the first commit..............................."
-    against=4b825dc642cb6eb9a060e54bf8d69288fbee4904
-fi
-
-# Use git diff-index to check for whitespace errors
-
-echo "[pre-commit]: Testing for whitespace errors.................................."
-
-if ! git diff-index --check --cached $against
-then
-    echo "[pre-commit]: commit [ABORTED] due to whitespace errors >---------> [FAILURE]"
-    exit 1
-else
-    echo "[pre-commit]: No whitespace errors >---------------------------> [SUCCESSFUL]"
-    # exit 0
-fi
 
 pwd
 .githooks/helperScripts/fileChecks.sh;
@@ -32,8 +8,8 @@ echo "pre-commit TOTAL_WARNINGS_COUNT = " $TOTAL_WARNINGS_COUNT
 if [[ $TOTAL_WARNINGS_COUNT != 0 ]];
 then
     printf 'THERE ARE FILE SCAN WARNINGS PRESENT. DO YOU WISH TO ABORT THE COMMIT? (Y/N):\n'
-    commitAbortionFlag="y"
-    if [ $commitAbortionFlag == "y" ] || [ $commitAbortionFlag == "yes" ];
+    read commitAbortionFlag
+    if [[ ${commitAbortionFlag} == "y"  ||  ${commitAbortionFlag} == "yes" ]];
     then
         echo "[ABORTING] Commit ...................."
         exit 1
@@ -43,4 +19,3 @@ then
 else
     echo 'Wohoo! SUCCESS! No File Scans Warnings Present! :)'
 fi
-
