@@ -3,6 +3,7 @@
 clear
 rm -rf target/PMC_FileScanLogs.txt
 str=$(git diff --name-only $(git merge-base master HEAD) & git ls-files --others --exclude-standard)
+TOTAL_WARNINGS_COUNT=0
 echo 'List of modified files: ---------------------------------------------------------->> '
 echo 'List of modified files: ---------------------------------------------------------->> ' >> target/PMC_FileScanLogs.txt
 separator=" "
@@ -70,6 +71,7 @@ do
             then
                 printf "[WARNING] File: $mf >> $mLine ***** please update to private access modifier instead of public *****\n"
                 echo "[WARNING] File: $mf >> $mLine ***** please update to private access modifier instead of public *****\n" >> target/PMC_FileScanLogs.txt
+                TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
             fi
         done
         printf "\n------------------------------------------------------------------------------------\n"
@@ -90,6 +92,7 @@ do
         then
             echo '[WARNING] @Story/@TestCase/@Defect not found in '$mf
             echo '[WARNING] @Story/@TestCase/@Defect not found in '$mf >> target/PMC_FileScanLogs.txt
+            TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
         fi
     fi
 done
@@ -109,6 +112,7 @@ do
         then
             echo '[WARNING] @Story/@TestCase/@Defect/@Test/@Step found in '$mf' but file name does not end with IT or UIIT\n'
             echo '[WARNING] @Story/@TestCase/@Defect/@Test/@Step found in '$mf' but file name does not end with IT or UIIT\n'  >> target/PMC_FileScanLogs.txt
+            TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
         fi
     fi
 done
@@ -144,6 +148,7 @@ do
                 noWarningsFlag=false
                 printf "[WARNING] Please use uppercase constant names: ==>> "$variableName' <<== in the file:'$mf'\n'
                 echo "[WARNING] Please use uppercase constant names: ==>> "$variableName' <<== in the file:'$mf'\n' >> target/PMC_FileScanLogs.txt
+                TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
             fi
             IFS=$'\n'
         done
@@ -176,6 +181,7 @@ do
         do
             printf "[WARNING] Use camelCase variable Names without underscores: ==>> "$mLine' <<== in the file:'$mf'\n'
             echo "[WARNING] Use camelCase variable Names without underscores: ==>> "$mLine' <<== in the file:'$mf'\n' >> target/PMC_FileScanLogs.txt
+            TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
             warningsFlag=true
         done
 
@@ -184,6 +190,7 @@ do
         do
             printf "[WARNING] Use camelCase method Names without underscores: ==>> "$mLine' <<== in the file:'$mf'\n'
             echo "[WARNING] Use camelCase method Names without underscores: ==>> "$mLine' <<== in the file:'$mf'\n' >> target/PMC_FileScanLogs.txt
+            TOTAL_WARNINGS_COUNT=$((TOTAL_WARNINGS_COUNT+1))
             warningsFlag=true
         done
 
@@ -196,8 +203,15 @@ do
 
 done
 
-
-
+echo "TOTAL_WARNINGS_COUNT = " $TOTAL_WARNINGS_COUNT
+if [[ $TOTAL_WARNINGS_COUNT != 0 ]];
+then
+    echo "The output logs can be checked at below location: target/PMC_FileScanLogs.txt"
+    return -1;
+else
+    echo 'Wohoo! SUCCESS! No File Scans Warnings Present! :)'
+    return 0;
+fi
 
 
 
