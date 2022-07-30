@@ -207,12 +207,18 @@ echo "TOTAL_WARNINGS_COUNT = " $TOTAL_WARNINGS_COUNT
 if [[ $TOTAL_WARNINGS_COUNT != 0 ]];
 then
     echo "The output logs can be checked at below location: target/PMC_FileScanLogs.txt"
-    return -1;
 else
     echo 'Wohoo! SUCCESS! No File Scans Warnings Present! :)'
-    return 0;
 fi
 
 
 
+
 IFS=$PREV_IFS
+
+
+
+function getTotalWarningsCount(){
+    #echo "printing from getTotalWarningsCount-- TOTAL_WARNINGS_COUNT = " $TOTAL_WARNINGS_COUNT
+    return $TOTAL_WARNINGS_COUNT;
+}
