@@ -7,7 +7,7 @@ pwd
 echo "pre-commit TOTAL_WARNINGS_COUNT = " $TOTAL_WARNINGS_COUNT
 if [[ $TOTAL_WARNINGS_COUNT != 0 ]];
 then
-    printf 'THERE ARE FILE SCAN WARNINGS PRESENT. DO YOU WISH TO ABORT THE COMMIT? (Y/N):\n'
+    echo 'THERE ARE FILE SCAN WARNINGS PRESENT. DO YOU WISH TO ABORT THE COMMIT? (Y/N):\n'
     read commitAbortionFlag
     if [[ ${commitAbortionFlag} == "y"  ||  ${commitAbortionFlag} == "yes" ]];
     then
