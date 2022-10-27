@@ -232,5 +232,5 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 * Fire Below command inside the project directory ::
     ```sh
     make
-    ```
+    ```''
    
