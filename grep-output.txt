@@ -1,0 +1,23 @@
+	@Test
+	public void sumTest() {
+		// This test will check the sum functionality of the test
+--
+--
+	@Test
+	public void subtractTest() {
+		// This test will check the subtract functionality of the test
+--
+--
+	@Test
+	public void MultiplyTest() {
+		// This test will check the multiply functionality of the test
+--
+--
+	@Test
+	public void divideTest() {
+		// This test will check the multiply functionality of the test
+--
+--
+
+	public void wrongHelperMethod(){
+		// something	
