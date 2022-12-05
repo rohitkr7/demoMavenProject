@@ -1,0 +1,20 @@
+2022-04-29 01:38:19,355 INFO o.a.j.u.JMeterUtils: Setting Locale to en_EN
+2022-04-29 01:38:19,408 INFO o.a.j.JMeter: Loading user properties from: /usr/local/Cellar/jmeter/5.4.3/libexec/bin/user.properties
+2022-04-29 01:38:19,410 INFO o.a.j.JMeter: Loading system properties from: /usr/local/Cellar/jmeter/5.4.3/libexec/bin/system.properties
+2022-04-29 01:38:19,419 INFO o.a.j.JMeter: Copyright (c) 1998-2021 The Apache Software Foundation
+2022-04-29 01:38:19,419 INFO o.a.j.JMeter: Version 5.4.3
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: java.version=17.0.1
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: java.vm.name=OpenJDK 64-Bit Server VM
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: os.name=Mac OS X
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: os.arch=x86_64
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: os.version=11.6.4
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: file.encoding=UTF-8
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: java.awt.headless=null
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: Max memory     =1073741824
+2022-04-29 01:38:19,420 INFO o.a.j.JMeter: Available Processors =12
+2022-04-29 01:38:19,435 INFO o.a.j.JMeter: Default Locale=English (EN)
+2022-04-29 01:38:19,436 INFO o.a.j.JMeter: JMeter  Locale=English (EN)
+2022-04-29 01:38:19,436 INFO o.a.j.JMeter: JMeterHome=/usr/local/Cellar/jmeter/5.4.3/libexec
+2022-04-29 01:38:19,436 INFO o.a.j.JMeter: user.dir  =/Users/sarah.fatima/git/demoMavenProject
+2022-04-29 01:38:19,436 INFO o.a.j.JMeter: PWD       =/Users/sarah.fatima/git/demoMavenProject
+2022-04-29 01:38:19,437 INFO o.a.j.JMeter: IP: 192.168.1.2 Name: MHYD9ED64C61 FullName: 192.168.1.2
