@@ -1,0 +1,14 @@
+pipeline {
+   agent any
+   tools {
+      maven 'Maven'
+   }
+   stages {
+      stage('Build') {
+         steps {
+            echo 'Building'
+            sh 'mvn -X clean install -DskipTests'
+         }
+      }
+   }
+}
