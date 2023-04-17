@@ -12,6 +12,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2.7.0
+        
+      - name: Try to Fail
+        run: exit 1
       
       - name: Setup JDK 11 for Sonar Cloud
         uses: actions/setup-java@v1.4.4
