@@ -1,0 +1,28 @@
+name: BestPipeline
+
+on:
+#   push:
+#     branches: ['master']
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2.7.0
+        
+      - name: Try to Fail
+        run: exit 1
+      
+      - name: Setup JDK 11 for Sonar Cloud
+        uses: actions/setup-java@v1.4.4
+        with:
+            java-version: 11
+      
+      - name: Maven Build
+        run: mvn clean install -DskipTests=true
+      
+      - name: Run JUnit Tests
+        run: mvn test -Dmaven.test.failure.ignore=true surefire-report:report
