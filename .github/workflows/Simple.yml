@@ -45,24 +45,3 @@ jobs:
 
         - name: Run JUnit Tests
           run: mvn test -Dmaven.test.failure.ignore=true surefire-report:report
-          
-  deploy:
-      needs: test
-      name: deploy
-      runs-on: ubuntu-latest
-      steps:     
-        - name: Custom Change
-          uses: ServiceNow/servicenow-devops-change@v1.35.2
-          with:
-            devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-            devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-            instance-url: ${{ secrets.SN_INSTANCE_URL }}
-            tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-            context-github: ${{ toJSON(github) }}
-            job-name: 'Deploy'
-            change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018"}}'
-            interval: '100'
-            timeout: '3600'
-
-        - name: Run deployment scripts
-          run: echo Completed Deployment.
