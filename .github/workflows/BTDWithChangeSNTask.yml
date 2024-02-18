@@ -1,10 +1,10 @@
 name: BTDWithChangeSNTask
-    
+
 on:
-#   push:
-#     branches: ['master']
-#   pull_request:
-#     branches: ['master']
+  #   push:
+  #     branches: ['master']
+  #   pull_request:
+  #     branches: ['master']
   workflow_dispatch:
 
 jobs:
@@ -12,45 +12,45 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Custom Change
-        uses: ServiceNow/servicenow-devops-change@v1.35.2
-        with:
-          devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-          devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-          instance-url: ${{ secrets.SN_INSTANCE_URL }}
-          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          context-github: ${{ toJSON(github) }}
-          job-name: 'Build'
-          change-request: '{"setCloseCode":"true","attributes":{"short_description":"FIRST CR Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
-          interval: '100'
-          timeout: '3600'
+      # - name: Custom Change
+      #   uses: ServiceNow/servicenow-devops-change@v1.35.2
+      #   with:
+      #     devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
+      #     devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
+      #     instance-url: ${{ secrets.SN_INSTANCE_URL }}
+      #     tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+      #     context-github: ${{ toJSON(github) }}
+      #     job-name: 'Build'
+      #     change-request: '{"setCloseCode":"true","attributes":{"short_description":"FIRST CR Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
+      #     interval: '100'
+      #     timeout: '3600'
 
       - name: Checkout Code
         uses: actions/checkout@v2
-      
+
       - name: Setup JDK 11 for Sonar Cloud
         uses: actions/setup-java@v1
         with:
-            java-version: 11
-      
+          java-version: 11
+
       - name: Maven Build
         run: mvn clean install -DskipTests=true
-        
+
       - name: Sonar Cloud Analysis
         if: success() # always() failure() success()
         run: >
-            mvn -B verify -DskipTests sonar:sonar
-            -Dsonar.projectKey=$SONAR_PROJECT_KEY
-            -Dsonar.organization=$SONAR_ORG_KEY
-            -Dsonar.host.url=$SONAR_URL
-            -Dsonar.login=$SONAR_TOKEN
+          mvn -B verify -DskipTests sonar:sonar
+          -Dsonar.projectKey=$SONAR_PROJECT_KEY
+          -Dsonar.organization=$SONAR_ORG_KEY
+          -Dsonar.host.url=$SONAR_URL
+          -Dsonar.login=$SONAR_TOKEN
         env:
-            GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-            SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
-            SONAR_URL: ${{ secrets.SONAR_URL }}
-            SONAR_ORG_KEY: ${{ secrets.SONAR_ORG_KEY }}
-            
+          GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+          SONAR_URL: ${{ secrets.SONAR_URL }}
+          SONAR_ORG_KEY: ${{ secrets.SONAR_ORG_KEY }}
+
       - name: ServiceNow DevOps Sonar Scan Results
         uses: ServiceNow/servicenow-devops-sonar@v1.34.2
         with:
@@ -58,14 +58,14 @@ jobs:
           devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          job-name: 'Build'
+          job-name: "Build"
           context-github: ${{ toJSON(github) }}
           sonar-host-url: ${{ secrets.SONAR_URL }}
           sonar-project-key: ${{ secrets.SONAR_PROJECT_KEY }}
-      
+
       - name: Run JUnit Tests
         run: mvn test -Dmaven.test.failure.ignore=true surefire-report:report
-        
+
       - name: ServiceNow DevOps Unit Test Results
         uses: ServiceNow/servicenow-devops-test-report@v1.34.2
         with:
@@ -74,14 +74,35 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
-          job-name: 'Build'
+          job-name: "Build"
           xml-report-filename: target/surefire-reports/testng-results.xml
-          
+
+  securityTest:
+    name: SecurityTest
+    runs-on: ubuntu-latest
+    steps:
+      - name:
+          ServiceNow DevOps Security Results
+          # You may pin to the exact commit or the version.
+          # uses: ServiceNow/servicenow-devops-security-result@26f3416768ffd3991f1a14c0304ba03075724929
+        uses: ServiceNow/servicenow-devops-security-result@v3.1.0
+        with:
+        # ServiceNow Instance URL
+         instance-url: ${{ secrets.SN_INSTANCE_URL }}
+        # Github Context
+         context-github: ${{ toJSON(github) }}
+        # Display Name of the Job
+         job-name: "SecurityTest"
+        # Security Results Attributes: For more information on defining the security attributes, View full Marketplace listing link above
+         security-result-attributes: "{'scanner': 'Veracode','applicationName': 'PetStoreAPI-Github', 'securityToolId' : '8462c9c6c32f351027b51185e001311c'}" 
+        # Orchestration Tool Id
+         tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+
   integrationTest:
     needs: build
     name: Integration Tests
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Register Artifact
         uses: ServiceNow/servicenow-devops-register-artifact@v1.34.2
         with:
@@ -90,7 +111,7 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
-          job-name: 'Integration Tests'
+          job-name: "Integration Tests"
           artifacts: ' [{"name": "com:autoclaim","version": "1.${{ github.run_number }}","semanticVersion": "1.${{ github.run_number }}.0","repositoryName": "${{ github.repository }}"}]'
 
       - name: Register Package
@@ -101,15 +122,15 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
-          job-name: 'Integration Tests'
+          job-name: "Integration Tests"
           artifacts: ' [{"name": "com:autoclaim","version": "1.${{ github.run_number }}","semanticVersion": "1.${{ github.run_number }}.0","repositoryName": "${{ github.repository }}"}]'
-          package-name: 'autoclaim.war'
-      
+          package-name: "autoclaim.war"
+
   deploy:
     needs: integrationTest
     name: Deploy
     runs-on: ubuntu-latest
-    steps:     
+    steps:
       - name: Custom Change
         uses: ServiceNow/servicenow-devops-change@v1.35.2
         with:
@@ -118,10 +139,10 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
-          job-name: 'Deploy'
+          job-name: "Deploy"
           change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018"}}'
-          interval: '100'
-          timeout: '3600'
-          
+          interval: "100"
+          timeout: "3600"
+
       - name: Run deployment scripts
         run: echo Completed Deployment.
