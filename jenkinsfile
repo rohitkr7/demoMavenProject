@@ -24,6 +24,18 @@ pipeline {
             }
          }
       }
+      stage('Veracode') {
+         steps {
+               echo 'Security Testing'
+               catchError {
+                  snDevOpsSecurityResult(securityResultAttributes: 
+                  "{
+                     'scanner': 'Veracode',
+                     'applicationName': 'PetStoreAPI-Github', 
+                     'securityToolId' : '8462c9c6c32f351027b51185e001311c'}" )
+               }
+         }
+      }
 
       stage('Create Artifact for prod') {
          when {
