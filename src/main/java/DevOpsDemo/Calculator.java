@@ -1,9 +1,5 @@
 package DevOpsDemo;
 
-import static org.junit.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
-import org.testng.annotations.Test;
-
 public class Calculator {
 	public double sum(double x, double y) {
 		return x + y;
