@@ -31,6 +31,7 @@ jobs:
       - name: Setup JDK 11 for Sonar Cloud
         uses: actions/setup-java@v2.5.1
         with:
+          distribution: 'temurin'
           java-version: 11
           architecture: 'x64'
 
