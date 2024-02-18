@@ -32,6 +32,7 @@ jobs:
         uses: actions/setup-java@v2.5.1
         with:
           java-version: 11
+          architecture: 'x64'
 
       - name: Maven Build
         run: mvn clean install -DskipTests=true
