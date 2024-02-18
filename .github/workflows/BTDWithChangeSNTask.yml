@@ -89,6 +89,8 @@ jobs:
         with:
         # ServiceNow Instance URL
          instance-url: ${{ secrets.SN_INSTANCE_URL }}
+         devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
+         devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
         # Github Context
          context-github: ${{ toJSON(github) }}
         # Display Name of the Job
