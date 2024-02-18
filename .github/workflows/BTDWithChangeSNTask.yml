@@ -79,6 +79,7 @@ jobs:
 
   securityTest:
     name: SecurityTest
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name:
@@ -96,12 +97,12 @@ jobs:
         # Display Name of the Job
          job-name: "SecurityTest"
         # Security Results Attributes: For more information on defining the security attributes, View full Marketplace listing link above
-         security-result-attributes: "{'scanner': 'Veracode','applicationName': 'PetStoreAPI-Github', 'securityToolId' : '8462c9c6c32f351027b51185e001311c'}" 
+         security-result-attributes: '{"scanner": "Veracode","applicationName": "PetStoreAPI-Github", "securityToolId" : "3d3672af879c02108cb0caa5cebb3553"}'
         # Orchestration Tool Id
          tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
 
   integrationTest:
-    needs: build
+    needs: securityTest
     name: Integration Tests
     runs-on: ubuntu-latest
     steps:
