@@ -58,6 +58,7 @@
 					<version>2.21.0</version>
 					<configuration>
 					    <reuseForks>false</reuseForks>
+					    <useSystemClassLoader>false</useSystemClassLoader>
 						<testFailureIgnore>true</testFailureIgnore>
 						<argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
 						<suiteXmlFiles>
