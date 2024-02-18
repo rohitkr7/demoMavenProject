@@ -1,4 +1,4 @@
-package DevOpsDemo;
+package DevOpsDemo.Apps;
 
 /**
  * Hello world!

@@ -3,8 +3,8 @@
 <suite name="Suite">
   <test thread-count="5" name="Test">
     <classes>
-      <class name="DevOpsDemo.CalculatorTest"/>
-      <class name="DevOpsDemo.AppTest"/>
+      <class name="DevOpsDemo.Calculators.CalculatorTest"/>
+      <class name="DevOpsDemo.Apps.AppTest"/>
     </classes>
   </test>
 </suite>

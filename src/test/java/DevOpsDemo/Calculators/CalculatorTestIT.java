@@ -1,10 +1,10 @@
-package DevOpsDemo;
+package DevOpsDemo.Calculators;
 
-import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.testng.annotations.Test;
 
-import org.junit.Test;
+import Calculators.Calculator;
 
 public class CalculatorTestIT {
 	Calculator calculator = new Calculator();

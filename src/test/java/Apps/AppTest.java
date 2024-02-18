@@ -1,10 +1,9 @@
-package DevOpsDemo;
+package Apps;
 
 import static org.testng.Assert.assertTrue;
-import static org.testng.Assert.assertFalse;
+
 import org.testng.annotations.Test;
 
-import org.junit.Test;
 
 /**
  * Unit test for simple App.
