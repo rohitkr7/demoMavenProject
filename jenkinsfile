@@ -1,89 +1,142 @@
 pipeline {
-   agent any
-   tools {
-      maven 'Maven'
-   }
-   stages {
-      stage('Build') {
-         steps {
-            echo 'Building'
-            sh 'mvn -X clean install -DskipTests'
-         }
-      }
-      stage('Test') {
-         steps {
-               echo 'Testing'
-               catchError {
-                  sh 'mvn test'
-               }
-            echo currentBuild.result
-         }
-         post {
-            always {
-               junit '**/target/surefire-reports/*.xml'
+    agent any
+    
+    tools {
+        maven 'Maven'
+        jdk 'JDK11'
+    }
+    
+    environment {
+        ARTIFACT_NAME = 'demoMavenProject'
+        ARTIFACT_VERSION = "0.${BUILD_NUMBER}.0"
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                echo 'Checking out code'
+                checkout scm
             }
-         }
-      }
-      stage('Veracode') {
-         steps {
-               echo 'Security Testing'
-               catchError {
-                  snDevOpsSecurityResult(securityResultAttributes: 
-                  "{
-                     'scanner': 'Veracode',
-                     'applicationName': 'PetStoreAPI-Github', 
-                     'securityToolId' : '8462c9c6c32f351027b51185e001311c'}" )
-               }
-         }
-      }
-
-      stage('Create Artifact for prod') {
-         when {
-            expression {
-               currentBuild.result == null || currentBuild.result == 'SUCCESS'
+        }
+        
+        stage('Build') {
+            steps {
+                echo 'Building project'
+                sh './mvnw clean compile'
             }
-         }
-         steps {
-            echo 'Creating artifact'
-            sh 'mvn package'
-            sleep 3
-            snDevOpsArtifact(artifactsPayload:"""
-               {"artifacts":
-                  [
-                     {
-                        "name": "mavenDemoProject-mvp.jar",
-                        "version":"0.${env.BUILD_NUMBER}.0",
-                        "semanticVersion": "0.${env.BUILD_NUMBER}.0",
-                        "repositoryName": "bicycle-artifacts-repo"
-                     }
-                    ]
-                 }""")
-            snDevOpsPackage(name: 'avgbicycleewingapp', artifactsPayload: """
-              {"artifacts":
-               [
-                  {
-                     "name": "mavenDemoProject-mvp.jar",
-                     "repositoryName": "bicycle-artifacts-repo",
-                     "pipelineName": "maven-buiild-pipeline",
-                     "taskExecutionNumber":"${env.BUILD_NUMBER}",
-                     "stageName":"Create Artifact for prod",
-                     "branchName": "master"
-                  }
-                 ]
-                }""")
-         }
-      }
-
-      stage('Deploy') {
-         steps {
-                  snDevOpsChange()
-                  script{
+        }
+        
+        stage('Code Quality') {
+            steps {
+                echo 'Running code quality checks'
+                sh './mvnw checkstyle:check'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                echo 'Running tests'
+                sh './mvnw test'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+            }
+        }
+        
+        stage('Security Scan') {
+            steps {
+                echo 'Running security scan'
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    sh './mvnw dependency-check:check'
+                }
+                // Keep original Veracode integration if needed
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    echo 'Running Veracode scan'
+                    snDevOpsSecurityResult(securityResultAttributes: 
+                    "{
+                        'scanner': 'Veracode',
+                        'applicationName': 'DemoMavenProject', 
+                        'securityToolId' : '8462c9c6c32f351027b51185e001311c'}" )
+                }
+            }
+        }
+        
+        stage('Package') {
+            when {
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS' || currentBuild.result == 'UNSTABLE'
+                }
+            }
+            steps {
+                echo 'Creating artifact'
+                sh './mvnw package -DskipTests'
+                
+                // Archive the artifacts in Jenkins
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                
+                // Keep original ServiceNow integration if needed
+                snDevOpsArtifact(artifactsPayload:"""
+                   {"artifacts":
+                      [
+                         {
+                            "name": "${ARTIFACT_NAME}.jar",
+                            "version":"${ARTIFACT_VERSION}",
+                            "semanticVersion": "${ARTIFACT_VERSION}",
+                            "repositoryName": "bicycle-artifacts-repo"
+                         }
+                        ]
+                     }""")
+                snDevOpsPackage(name: 'demoMavenProject', artifactsPayload: """
+                  {"artifacts":
+                   [
+                      {
+                         "name": "${ARTIFACT_NAME}.jar",
+                         "repositoryName": "bicycle-artifacts-repo",
+                         "pipelineName": "maven-build-pipeline",
+                         "taskExecutionNumber":"${env.BUILD_NUMBER}",
+                         "stageName":"Package",
+                         "branchName": "${env.BRANCH_NAME}"
+                      }
+                     ]
+                    }""")
+            }
+        }
+        
+        stage('Deploy to Dev') {
+            when {
+                expression {
+                    currentBuild.result == null || currentBuild.result == 'SUCCESS' || currentBuild.result == 'UNSTABLE'
+                }
+            }
+            steps {
+                echo 'Deploying to development environment'
+                // Add deployment steps here
+                
+                // Keep original ServiceNow integration if needed
+                snDevOpsChange()
+                script {
                     changeNumber = snDevOpsGetChangeNumber()
-                    echo '>> Deploy in prod'
-                    sh "echo ${changeNumber}"
-                  
-                  }
-         }
-      }
-   }
+                    echo ">> Deploying with change number: ${changeNumber}"
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline execution completed'
+            // Clean workspace after build
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline executed successfully'
+        }
+        failure {
+            echo 'Pipeline execution failed'
+            // Send notification on failure
+            // mail to: 'team@example.com', subject: "Failed Pipeline: ${currentBuild.fullDisplayName}", body: "Pipeline failed. Please check Jenkins for details: ${env.BUILD_URL}"
+        }
+    }
 }

@@ -1,9 +1,10 @@
 # Demo Maven Project with Git-Hooks
 
-<!-- <img src="https://ai.github.io/size-limit/logo.svg" align="right"
-     alt="Size Limit logo by Anton Lovchikov" width="120" height="178"> -->
+<p align="center">
+  <img src="./img/project-structure.png" alt="Project Structure" width="650">
+</p>
 
-This project contains a Maven project with tests. Git-Hooks are configured and being version controlled.
+This project demonstrates a Java Maven application with integrated Git hooks for enforcing code quality standards. It includes a simple calculator implementation with proper logging and comprehensive test coverage.
 
 ## Project Structure ::
 <p align="center">
@@ -209,6 +210,53 @@ This project contains a Maven project with tests. Git-Hooks are configured and b
 
 <!-- * [MobX](https://github.com/mobxjs/mobx) -->
 
+
+## Features
+
+- Java 11 based Maven project
+- Calculator implementation with basic arithmetic operations
+- SLF4J with Logback for logging
+- Comprehensive JUnit and TestNG test coverage
+- Git hooks for code quality enforcement
+- CI/CD integration with Jenkins and GitHub Actions
+
+## Getting Started
+
+### Prerequisites
+
+- Java 11 or higher
+- Maven 3.6 or higher
+- Git
+
+### Installation
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/demoMavenProject.git
+   cd demoMavenProject
+   ```
+
+2. Install Git hooks
+   ```bash
+   ./install_hooks.sh
+   ```
+
+3. Build the project
+   ```bash
+   mvn clean install
+   ```
+
+### Running the Application
+
+```bash
+mvn exec:java -Dexec.mainClass="DevOpsDemo.Apps.App"
+```
+
+### Running Tests
+
+```bash
+mvn test
+```
 
 ## How It Works
 

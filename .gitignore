@@ -20,13 +20,28 @@ local.properties
 .loadpath
 .recommenders
 .classpath
+.apt_generated
+.factorypath
+.project
+.springBeans
+.sts4-cache
 .DS_Store
 
 ### Java ###
-# Compiled class file
+# Compiled class files
 *.class
 
-# Package Files #
+# Log files
+*.log
+logs/
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
 *.jar
 *.war
 *.nar
@@ -34,3 +49,41 @@ local.properties
 *.zip
 *.tar.gz
 *.rar
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+### OWASP dependency check reports ###
+dependency-check-report.html
+dependency-check-report.xml
+
+### Checkstyle reports ###
+checkstyle-result.xml
